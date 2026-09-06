@@ -1,8 +1,13 @@
 import logging
 from datetime import time
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import (
+    Application,
+    CallbackQueryHandler,
+    CommandHandler,
+    ContextTypes,
+)
 
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
 
 BOT_TOKEN = "8847835270:AAFuyfdhlgn030rZbHFCuvcYKzzYYm6Ybr8"
 CHAT_ID = 5724756801
@@ -26,14 +31,29 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+def build_keyboard() -> InlineKeyboardMarkup:
+    button = InlineKeyboardButton("✅ Выполнено", callback_data="done")
+    return InlineKeyboardMarkup([[button]])
+
 
 async def send_reminder(context: ContextTypes.DEFAULT_TYPE) -> None:
     text = context.job.data
-    await context.bot.send_message(chat_id=CHAT_ID, text=text)
+    await context.bot.send_message(
+        chat_id=CHAT_ID, text=text, reply_markup=build_keyboard()
+        )
+async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = update.callback_query
+    await query.answer() 
+ 
+    if query.data == "done":
+        original_text = query.message.text
+        await query.edit_message_text(
+            text=f"{original_text}\n\n✅ Отмечено как выполнено!"
+        )
+
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Команда /start — проверка, что бот работает, и подсказка chat_id."""
     chat_id = update.effective_chat.id
     await update.message.reply_text(
         f"{chat_id}"
