@@ -71,6 +71,7 @@ def main() -> None:
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("test", test_reminder))
+    application.add_handler(CallbackQueryHandler(button_handler))
 
     job_queue = application.job_queue
     for hour, minute, text in REMINDERS:
