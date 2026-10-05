@@ -13,7 +13,7 @@ CHAT_ID = 5724756801
 # BOT_TOKEN = "8203402267:AAFRKSIxihE1tmZzlcF636MFWl6cTNr6lF0"
 # CHAT_ID = 5481777055
 
-EAT_INTERVAL = 2  # секунд (3 минуты)
+EAT_INTERVAL = 180  # секунд (3 минуты)
 EAT_JOB_NAME = "eat_check"
 
 REMINDERS = [
